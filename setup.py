@@ -12,8 +12,8 @@ import iris_validator
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as readme_file:
-    readme = readme_file.read()
+#with open(path.join(here, 'README.rst'), encoding='utf-8') as readme_file:
+    #readme = readme_file.read()
 
 with open(path.join(here, 'HISTORY.rst'), encoding='utf-8') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
@@ -45,7 +45,7 @@ setup(
     #cmdclass=versioneer.get_cmdclass(),
     version=iris_validator.__version__,
     description="Implementation of IRIS StationXML validation rules",
-    long_description=readme + '\n\n' + history,
+    #long_description=readme + '\n\n' + history,
     author="Mike Hagerty",
     author_email='mhagerty@isti.com',
     url='https://gitlab.isti.com/mhagerty/iris-validator',

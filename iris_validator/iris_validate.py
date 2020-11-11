@@ -1474,8 +1474,8 @@ def validate_iris_stationxml_examples_vs_rules():
 
             passed, errors = stationxml_passes_rule(xmlfile, code)
 
-            for error in errors:
-                print(error)
+            #for error in errors:
+                #print(error)
 
             if fname[0:1] == 'P':
                 if not passed:

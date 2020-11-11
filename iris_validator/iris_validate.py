@@ -10,6 +10,7 @@ logger.basicConfig(level=logger.WARN)
 import obspy
 #from obspy import read_inventory
 from .stationxml_obs import _read_stationxml
+from . import installation_dir
 
 from obspy.core.inventory.response import PolesZerosResponseStage, FIRResponseStage
 from obspy.core.inventory.response import ResponseStage, CoefficientsTypeResponseStage
@@ -1457,17 +1458,18 @@ def validate_iris_stationxml_examples_vs_rules():
             Test to see that file P?_XXX.xml correctly PASSES rule_code=XXX
     '''
 
-    TEST_DIR = "/Users/mth/mth/python_pkgs/stationxml-validator/src/test/resources/"
+    test_dir = os.path.join(installation_dir(), 'iris_resources')
 
     for rule in error_codes.keys():
         files = test_xmls[rule]
 
         for fname in files:
-            xmlfile = os.path.join(TEST_DIR, fname)
+            xmlfile = os.path.join(test_dir, fname)
             #code = fname[3:6]
             code = rule
 
-            print("Check file:%s against Rule:%s" % (fname, code))
+            #print("Check file:%s against Rule:%s" % (fname, code))
+            print("Check file:%s against Rule:%s [file:%s]" % (fname, code, xmlfile))
             if not os.path.isfile(xmlfile):
                 print("******* Error: Can't find file:%s" % fname)
                 continue

@@ -19,7 +19,7 @@ with open(path.join(here, 'HISTORY.rst'), encoding='utf-8') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 requirements = [
-    #'obspy>=1.2',
+    'obspy>=1.2',
 ]
 
 test_requirements = [

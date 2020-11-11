@@ -1468,8 +1468,8 @@ def validate_iris_stationxml_examples_vs_rules():
             #code = fname[3:6]
             code = rule
 
-            #print("Check file:%s against Rule:%s" % (fname, code))
-            print("Check file:%s against Rule:%s [file:%s]" % (fname, code, xmlfile))
+            #print("Check file:%s against Rule:%s [file:%s]" % (fname, code, xmlfile))
+            print("Check file:%s against Rule:%s" % (fname, code))
             if not os.path.isfile(xmlfile):
                 print("******* Error: Can't find file:%s" % fname)
                 continue

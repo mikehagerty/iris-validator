@@ -16,7 +16,6 @@ def main():
     args = process_cmd_line(fname)
 
     if args.run_tests:
-        print("RUN the TESTS!")
         validate_iris_stationxml_examples_vs_rules()
     else:
         validator = stationxml_validator(args.infile)

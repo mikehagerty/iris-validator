@@ -8,22 +8,16 @@ logger.basicConfig(level=logger.WARN)
 
 from iris_validator import stationxml_validator
 
-
 def main():
 
     fname = 'iris-validator'
 
     args = process_cmd_line(fname)
 
-    #TEST_DIR = "/Users/mth/mth/python_pkgs/stationxml-validator/src/test/resources/"
-    # Let the helper function do it:
-    #validate_stationxml_file_vs_rules(os.path.join(TEST_DIR, 'Validator_Pass.xml'))
-    # Or, if you want to capture the validator errors/warnings yourself:
-    #validator = stationxml_validator(os.path.join(TEST_DIR, 'Validator_Pass.xml'))
-
     validator = stationxml_validator(args.infile)
-
     validator.validate_inventory()
+    print("[SUMMARY]:")
+    print("%7s N_Errors:%d N_Warnings:%d\n" % (' ', len(validator.errors), len(validator.warnings)))
     print("[ERRORS]:\n")
     for msgs in validator.errors:
         for i, msg in enumerate(msgs):

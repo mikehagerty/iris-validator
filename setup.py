@@ -19,7 +19,7 @@ with open(path.join(here, 'HISTORY.rst'), encoding='utf-8') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 requirements = [
-    'obspy>=1.2',
+    #'obspy>=1.2',
 ]
 
 test_requirements = [
@@ -57,7 +57,7 @@ setup(
             ],
         },
     include_package_data=True,
-    #package_data = { 'yasmine_cli': ['yml/*', 'config.yml'] },
+    package_data = { 'iris_validator': ['iris_resources/*',] },
     install_requires=requirements,
     license="MIT",
     classifiers=[

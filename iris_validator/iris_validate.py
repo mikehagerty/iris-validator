@@ -8,9 +8,11 @@ import logging as logger
 logger.basicConfig(level=logger.WARN)
 
 import obspy
-from obspy import read_inventory
+#from obspy import read_inventory
+from .stationxml_obs import _read_stationxml
+
 from obspy.core.inventory.response import PolesZerosResponseStage, FIRResponseStage
-from obspy.core.inventory.response import CoefficientsTypeResponseStage
+from obspy.core.inventory.response import ResponseStage, CoefficientsTypeResponseStage
 from obspy.core.inventory.response import PolynomialResponseStage
 from obspy.core.inventory.response import InstrumentPolynomial
 from obspy.core.inventory.response import InstrumentSensitivity
@@ -64,7 +66,8 @@ class stationxml_validator():
             self.stationxml = stationxml_or_inventory
             logger.debug("stationxml_validator: attempt to read file=[%s]" % self.stationxml)
             try:
-                self.inv = read_inventory(self.stationxml, format="STATIONXML")
+                #self.inv = read_inventory(self.stationxml, format="STATIONXML")
+                self.inv = _read_stationxml(self.stationxml)
                 #print(self.inv)
             except Exception as ex:
                 template = "read_inventory: An exception of type {0} occurred. Arguments:\n{1!r}"
@@ -722,9 +725,10 @@ class stationxml_validator():
         if channel.code[-1] != 'N':
             return True
 
-        if channel.dip >= -5. and channel.dip <= 5 :
-           if (channel.azimuth >= 355 and channel.azimuth <= 5) \
-           or (channel.azimuth >= 175 and channel.azimuth <= 185.):
+        #print("Check channel.dip=%s channel.azimuth=%s" % (channel.dip, channel.azimuth))
+        if channel.dip >= -5. and channel.dip <= 5 and \
+           ((channel.azimuth >= 355 and channel.azimuth <= 5) or \
+            (channel.azimuth >= 175 and channel.azimuth <= 185.)):
             return True
         else:
             msg = "Stn:%s Chan:%s Has incorrect dip:%f and/or azim:%f for a chan of type: '%s'\n" \
@@ -1232,36 +1236,31 @@ class stationxml_validator():
     # 423 If Decimation and StageGain are included in Stage[N] then 
     #     PolesZeros or Coefficients or ResponseList or FIR must also be included in Stage[N].
     def validate_rule_423(self, channel):
-        # MTH: This check doesn't work, at least not for IRIS test F1_423.xml
-        #      When ObsPy reads in the first stage, which has decimation_input_sample_rate
-        #      and decimation factor, but no Coefficient/PolesZeros/etc designation,
-        #      it creates a generic ResponseStage but sets input_sample_rate and decimation_factor
-        #      to None.
 
         rule_code = '423'
         if self.missing_response(channel, rule_code):
             return False
+
         stages = channel.response.response_stages
 
-        decimation_stage_found = False
-
         passed = True
+
+        allowed_types = ['PolesZerosResponseStage',
+                         'CoefficientsTypeResponseStage',
+                         'FIRResponseStage',
+                         'ResponseListResponseStage'
+                         ]
+
         for i, stage in enumerate(stages):
-            #print("stage: %2d gain:%s input_sr:%s decim_factor:%s type:%s" % 
-                  #(i, stage.stage_gain, stage.decimation_input_sample_rate, stage.decimation_factor, type(stage).__name__))
-            if getattr(stage, 'decimation_factor') and getattr(stage, 'stage_gain'):
-                valid = False
-                if isinstance(stage, PolesZerosResponseStage) or \
-                   isinstance(stage, CoefficientsTypeResponseStage) or \
-                   isinstance(stage, ResponseListResponseStage) or \
-                   isinstance(stage, FIRResponseStage):
-                    valid = True
-                if not valid:
-                    msg = "Chan:%s response stage hsa decimation + gain but odd type:%s" % \
-                            (channel.code, type(stage).__name__)
-                    self.errors.append((print_error(rule_code), msg))
-                    self.return_codes.append(rule_code)
-                    passed = False
+            stage_type = type(stage).__name__
+            if stage.decimation_input_sample_rate and stage_type not in allowed_types:
+                msg = "Chan:%s response stage:%d has type:%s and input_sample_rate:%s --> decimation element is not allowed!" % \
+                        (channel.code, i, type(stage).__name__, stage.decimation_input_sample_rate)
+                #print(msg)
+                self.errors.append((print_error(rule_code), msg))
+                self.return_codes.append(rule_code)
+                passed = False
+
         return passed
 
 ### End of stationxml_validator class
@@ -1500,10 +1499,15 @@ def main():
         #xmlfile = os.path.join(TEST_DIR, fname)
         #rule = fname[3:6]
         #passed, errors = stationxml_passes_rule(xmlfile, rule)
+    validator = stationxml_validator('./iris_resources/F1_423.xml')
+    validator.validate_rule('423')
 
+    #print(inv)
+    exit()
+
+    TEST_DIR = "/Users/mth/mth/python_pkgs/stationxml-validator/src/test/resources/"
     validate_iris_stationxml_examples_vs_rules()
     exit()
-    TEST_DIR = "/Users/mth/mth/python_pkgs/stationxml-validator/src/test/resources/"
     validate_stationxml_file_vs_rules(os.path.join(TEST_DIR, 'Validator_Pass.xml'))
 
 if __name__ == "__main__":

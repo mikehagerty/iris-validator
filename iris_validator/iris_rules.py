@@ -28,12 +28,15 @@ test_xmls = {
     '320' : ['F1_320.xml'],
     '321' : ['F1_321.xml'],
     '332' : ['F1_332.xml', 'P1_332.xml', 'P2_332.xml', 'P3_332.xml', 'P4_332.xml'],
-    '333' : ['F1_332.xml', 'P1_332.xml', 'P2_332.xml', 'P3_332.xml', 'P4_332.xml'],
-    '334' : ['F1_332.xml', 'P1_332.xml', 'P2_332.xml', 'P3_332.xml', 'P4_332.xml'],
+    # MTH: F1_333 and F1_334 don't exist in repo yet!
+    #'333' : ['F1_332.xml', 'P1_332.xml', 'P2_332.xml', 'P3_332.xml', 'P4_332.xml'],
+    #'334' : ['F1_332.xml', 'P1_332.xml', 'P2_332.xml', 'P3_332.xml', 'P4_332.xml'],
     '401' : ['F1_401.xml'],
     '402' : ['F1_402.xml'],
     '403' : ['F1_403.xml', 'F2_403.xml'],
-    '404' : ['F1_404.xml', 'F2_404.xml', 'F3_404.xml', 'F4_404.xml', 'P1_404.xml'],
+    # F3_404.xml is missing from repo
+    #'404' : ['F1_404.xml', 'F2_404.xml', 'F3_404.xml', 'F4_404.xml', 'P1_404.xml'],
+    '404' : ['F1_404.xml', 'F2_404.xml', 'F4_404.xml', 'P1_404.xml'],
     '405' : ['F1_405.xml', 'P1_405.xml'],
     '410' : ['F1_410.xml', 'F2_410.xml'],
     '411' : ['F1_411.xml'],
@@ -232,18 +235,19 @@ error_codes = {
              'type' : type_Warning,
              'restrictions' : ['C1','C2'],
             },
-    '333' : {'description' : "If Channel:Code[LAST]==E then Channel:Azimuth must be assigned "
-                             "(>=85.0 and <=95.0) or (>=265.0 and <=275.0) and Channel:Dip must "
-                             "be ASSIGNED (>=-5.0 and <=5.0).",
-             'type' : type_Warning,
-             'restrictions' : ['C1','C2'],
-            },
-    '334' : {'description' : "If Channel:Code[LAST]==Z then Channel:Azimuth must be assigned "
-                             "(>=355.0 or <=5.0) and Channel:Dip must be assigned "
-                             "(>=-85.0 and <=-90.0) or (>=85.0 and <=90.0).",
-             'type' : type_Warning,
-             'restrictions' : ['C1','C2'],
-            },
+    # 333 and 334 are Missing from repo
+    #'333' : {'description' : "If Channel:Code[LAST]==E then Channel:Azimuth must be assigned "
+                             #"(>=85.0 and <=95.0) or (>=265.0 and <=275.0) and Channel:Dip must "
+                             #"be ASSIGNED (>=-5.0 and <=5.0).",
+             #'type' : type_Warning,
+             #'restrictions' : ['C1','C2'],
+            #},
+    #'334' : {'description' : "If Channel:Code[LAST]==Z then Channel:Azimuth must be assigned "
+                             #"(>=355.0 or <=5.0) and Channel:Dip must be assigned "
+                             #"(>=-85.0 and <=-90.0) or (>=85.0 and <=90.0).",
+             #'type' : type_Warning,
+             #'restrictions' : ['C1','C2'],
+            #},
 
   # Response Stage Errors
     '401' : {'description' : "Stage:number must start at 1 and be sequential.",
